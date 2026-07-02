@@ -2,13 +2,14 @@ import Link from "next/link";
 import { ArrowRight, Wrench, Zap, GitCompare, Target } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { ToolCard } from "@/components/tools/tool-card";
+import { WorkflowCard } from "@/components/tools/workflow-card";
 import { SearchBar } from "@/components/tools/search-bar";
 import {
   getFeaturedTools,
   getNewTools,
-  scenes,
   categories,
 } from "@/data/tools";
+import { workflows } from "@/data/workflows";
 
 export default function LandingPage() {
   const featured = getFeaturedTools();
@@ -87,34 +88,31 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Scenes */}
-      <section id="scenes" className="mx-auto max-w-6xl px-4 pb-20">
-        <div className="mb-8 text-center">
-          <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
-            你是哪类用户？
-          </h2>
-          <p className="mt-2 text-muted-foreground">
-            按场景找工具，比按分类翻快10倍
-          </p>
+      {/* Workflows */}
+      <section id="workflows" className="mx-auto max-w-6xl px-4 pb-20">
+        <div className="mb-8 flex items-end justify-between">
+          <div>
+            <p className="text-sm font-semibold tracking-wide text-violet-600 dark:text-violet-400">
+              工作流专区
+            </p>
+            <h2 className="mt-1 text-2xl font-bold tracking-tight md:text-3xl">
+              真正好用的导航，要直接给可执行方案
+            </h2>
+            <p className="mt-2 text-muted-foreground">
+              不只是列工具，而是告诉你该怎么用、按什么顺序操作
+            </p>
+          </div>
+          <Link
+            href="/workflows"
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            查看全部
+            <ArrowRight className="ml-1 h-3.5 w-3.5" />
+          </Link>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {scenes.map((scene) => (
-            <Link
-              key={scene.id}
-              href={`/tools?scene=${scene.id}`}
-              className="group flex items-start gap-3 rounded-xl border border-border/60 bg-card p-4 transition-all hover:border-violet-300 hover:shadow-md hover:shadow-violet-500/5 dark:hover:border-violet-700"
-            >
-              <span className="text-2xl">{scene.icon}</span>
-              <div className="flex-1">
-                <h3 className="font-medium">{scene.name}</h3>
-                <p className="mt-0.5 text-xs text-muted-foreground">
-                  {scene.description}
-                </p>
-                <span className="mt-2 inline-block text-xs text-violet-600 dark:text-violet-400">
-                  {scene.toolCount} 个工具 →
-                </span>
-              </div>
-            </Link>
+        <div className="grid gap-6 md:grid-cols-2">
+          {workflows.slice(0, 4).map((wf) => (
+            <WorkflowCard key={wf.id} workflow={wf} />
           ))}
         </div>
       </section>
