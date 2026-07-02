@@ -17,7 +17,7 @@ export async function generateMetadata({
   const tool = getToolBySlug(slug);
   if (!tool) return { title: "未找到" };
   return {
-    title: `${tool.name} — ${tool.tagline} | AIRadar`,
+    title: `${tool.name} — ${tool.tagline} | AI-Toolbox`,
     description: tool.description,
   };
 }

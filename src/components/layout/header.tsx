@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Radar } from "lucide-react";
+import { Wrench } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 
@@ -11,9 +11,9 @@ export function Header() {
           href="/"
           className="flex items-center gap-2 font-bold tracking-tight"
         >
-          <Radar className="h-5 w-5 text-violet-500" />
+          <Wrench className="h-5 w-5 text-violet-500" />
           <span>
-            AI<span className="text-violet-500">Radar</span>
+            AI-<span className="text-violet-500">Toolbox</span>
           </span>
         </Link>
 

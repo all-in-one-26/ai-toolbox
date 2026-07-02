@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AIRadar — AI工具雷达 | 发现最好用的AI工具",
+  title: "AI-Toolbox — 发现最好用的AI工具",
   description:
     "不只是导航，是你的AI工具智能顾问。场景化分类、智能推荐、工具对比，帮你从1000+AI工具中找到最适合的那个。",
   keywords: [

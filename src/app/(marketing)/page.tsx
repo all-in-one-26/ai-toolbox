@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Radar, Zap, GitCompare, Target } from "lucide-react";
+import { ArrowRight, Wrench, Zap, GitCompare, Target } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { ToolCard } from "@/components/tools/tool-card";
 import { SearchBar } from "@/components/tools/search-bar";
@@ -21,7 +21,7 @@ export default function LandingPage() {
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_50%_-20%,oklch(0.75_0.15_280/0.25),transparent)]" />
         <div className="mx-auto max-w-6xl px-4 pb-16 pt-20 text-center md:pt-28">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-4 py-1.5 text-sm text-violet-700 dark:border-violet-800 dark:bg-violet-950/50 dark:text-violet-300">
-            <Radar className="h-3.5 w-3.5" />
+            <Wrench className="h-3.5 w-3.5" />
             不只是导航，是你的AI工具智能顾问
           </div>
           <h1 className="mx-auto max-w-3xl text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">

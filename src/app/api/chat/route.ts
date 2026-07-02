@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: openai("gpt-4o-mini"),
-    system: `你是 AIRadar 的AI工具推荐顾问。用户会描述他们的需求，你帮他们从以下工具库中推荐最合适的1-3个工具，并简要说明推荐理由。
+    system: `你是 AI-Toolbox 的AI工具推荐顾问。用户会描述他们的需求，你帮他们从以下工具库中推荐最合适的1-3个工具，并简要说明推荐理由。
 
 工具库：
 ${toolContext}
