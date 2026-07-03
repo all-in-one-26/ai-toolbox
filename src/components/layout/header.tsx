@@ -93,24 +93,20 @@ export function Header() {
                 工具箱
               </Link>
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button
-                    type="button"
-                    className="flex h-8 w-8 items-center justify-center rounded-full bg-violet-100 text-xs font-semibold text-violet-700 transition-colors hover:bg-violet-200 dark:bg-violet-900/40 dark:text-violet-300 dark:hover:bg-violet-900/60"
-                  >
-                    {initials}
-                  </button>
+                <DropdownMenuTrigger className="flex h-8 w-8 items-center justify-center rounded-full bg-violet-100 text-xs font-semibold text-violet-700 transition-colors hover:bg-violet-200 dark:bg-violet-900/40 dark:text-violet-300 dark:hover:bg-violet-900/60">
+                  {initials}
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <div className="px-2 py-1.5 text-xs text-muted-foreground">
                     {user.email}
                   </div>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/dashboard" className="cursor-pointer">
-                      <Heart className="mr-2 h-4 w-4" />
-                      我的工具箱
-                    </Link>
+                  <DropdownMenuItem
+                    render={<Link href="/dashboard" />}
+                    className="cursor-pointer"
+                  >
+                    <Heart className="mr-2 h-4 w-4" />
+                    我的工具箱
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
