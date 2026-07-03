@@ -4,16 +4,35 @@ import { buttonVariants } from "@/components/ui/button";
 import { ToolCard } from "@/components/tools/tool-card";
 import { ScenarioCard } from "@/components/scenarios/scenario-card";
 import { SearchBar } from "@/components/tools/search-bar";
+import { getFeaturedTools, getNewTools, categories } from "@/data/tools";
 import {
-  getFeaturedTools,
-  getNewTools,
-  categories,
-} from "@/data/tools";
-import { allScenarios, scenarioCategories } from "@/data/scenarios";
+  allScenarios,
+  scenarioCategories,
+  getScenariosByCategory,
+} from "@/data/scenarios";
+
+function pickDiverseScenarios(count: number) {
+  const picked: typeof allScenarios = [];
+  for (const cat of scenarioCategories) {
+    const catScenarios = getScenariosByCategory(cat.id);
+    if (catScenarios.length > 0 && picked.length < count) {
+      picked.push(catScenarios[0]);
+    }
+  }
+  let idx = 0;
+  while (picked.length < count && idx < allScenarios.length) {
+    if (!picked.some((p) => p.id === allScenarios[idx].id)) {
+      picked.push(allScenarios[idx]);
+    }
+    idx++;
+  }
+  return picked.slice(0, count);
+}
 
 export default function LandingPage() {
   const featured = getFeaturedTools();
   const newTools = getNewTools();
+  const showcaseScenarios = pickDiverseScenarios(6);
 
   return (
     <>
@@ -33,8 +52,7 @@ export default function LandingPage() {
             </span>
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground md:text-lg">
-            场景化智能推荐、横向PK对比、实时雷达追踪 —
-            告别盲目试用，精准匹配你的需求。
+            场景化智能推荐、横向PK对比 — 告别盲目试用，精准匹配你的需求。
           </p>
           <div className="mt-8 flex justify-center">
             <SearchBar />
@@ -56,35 +74,27 @@ export default function LandingPage() {
 
       {/* Why Different */}
       <section className="mx-auto max-w-6xl px-4 pb-16">
-        <div className="grid gap-4 md:grid-cols-3">
-          {[
-            {
-              icon: Target,
-              title: "场景化推荐",
-              desc: '按"自媒体/电商/开发者"找工具，不再漫无目的翻分类',
-            },
-            {
-              icon: GitCompare,
-              title: "工具PK对比",
-              desc: "ChatGPT vs Claude 全维度横向对比，帮你做选择",
-            },
-            {
-              icon: Zap,
-              title: "实时雷达",
-              desc: "每日追踪新工具上线和价格变动，第一时间推送",
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="rounded-xl border border-border/60 bg-card p-5 text-center"
-            >
-              <item.icon className="mx-auto h-8 w-8 text-violet-500" />
-              <h3 className="mt-3 font-semibold">{item.title}</h3>
-              <p className="mt-1.5 text-sm text-muted-foreground">
-                {item.desc}
-              </p>
-            </div>
-          ))}
+        <div className="grid gap-4 md:grid-cols-2">
+          <Link
+            href="/scenarios"
+            className="rounded-xl border border-border/60 bg-card p-5 text-center transition-all hover:border-violet-300 hover:shadow-md dark:hover:border-violet-700"
+          >
+            <Target className="mx-auto h-8 w-8 text-violet-500" />
+            <h3 className="mt-3 font-semibold">场景化推荐</h3>
+            <p className="mt-1.5 text-sm text-muted-foreground">
+              按&quot;自媒体/电商/开发者&quot;找工具，不再漫无目的翻分类
+            </p>
+          </Link>
+          <Link
+            href="/compare"
+            className="rounded-xl border border-border/60 bg-card p-5 text-center transition-all hover:border-violet-300 hover:shadow-md dark:hover:border-violet-700"
+          >
+            <GitCompare className="mx-auto h-8 w-8 text-violet-500" />
+            <h3 className="mt-3 font-semibold">工具PK对比</h3>
+            <p className="mt-1.5 text-sm text-muted-foreground">
+              ChatGPT vs Claude 全维度横向对比，帮你做选择
+            </p>
+          </Link>
         </div>
       </section>
 
@@ -122,7 +132,7 @@ export default function LandingPage() {
           ))}
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {allScenarios.slice(0, 6).map((scenario) => (
+          {showcaseScenarios.map((scenario) => (
             <ScenarioCard key={scenario.id} scenario={scenario} />
           ))}
         </div>
@@ -174,17 +184,26 @@ export default function LandingPage() {
       {/* New Tools */}
       {newTools.length > 0 && (
         <section className="mx-auto max-w-6xl px-4 pb-20">
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold tracking-tight">
-              <Zap className="mr-2 inline h-5 w-5 text-amber-500" />
-              最新上线
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              最近发现的值得关注的新工具
-            </p>
+          <div className="mb-8 flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight">
+                <Zap className="mr-2 inline h-5 w-5 text-amber-500" />
+                最新上线
+              </h2>
+              <p className="mt-1 text-sm text-muted-foreground">
+                最近发现的值得关注的新工具
+              </p>
+            </div>
+            <Link
+              href="/tools"
+              className={buttonVariants({ variant: "outline", size: "sm" })}
+            >
+              查看全部
+              <ArrowRight className="ml-1 h-3.5 w-3.5" />
+            </Link>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {newTools.map((tool) => (
+            {newTools.slice(0, 9).map((tool) => (
               <ToolCard key={tool.id} tool={tool} />
             ))}
           </div>

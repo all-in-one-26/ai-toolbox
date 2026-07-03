@@ -65,7 +65,7 @@ export default function SignupPage() {
             className="inline-flex items-center gap-2 font-semibold"
           >
             <Sparkles className="h-5 w-5 text-primary" />
-            AI Toolbox
+            AI-Toolbox
           </Link>
           <h1 className="mt-4 text-2xl font-bold">创建账户</h1>
           <p className="mt-1 text-sm text-muted-foreground">

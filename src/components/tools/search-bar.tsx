@@ -33,7 +33,7 @@ export function SearchBar() {
         className="h-11 gap-2 bg-violet-600 hover:bg-violet-700"
       >
         <Sparkles className="h-4 w-4" />
-        智能搜索
+        搜索
       </Button>
     </form>
   );
