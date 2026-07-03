@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Star, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { FavoriteButton } from "@/components/tools/favorite-button";
 import type { Tool } from "@/data/tools";
 
 const pricingColors: Record<string, string> = {
@@ -76,14 +77,17 @@ export function ToolCard({ tool }: { tool: Tool }) {
         </div>
       </Link>
 
-      <a
-        href={tool.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="absolute right-3 top-3 rounded-md p-1.5 text-muted-foreground/0 transition-all group-hover:text-muted-foreground hover:bg-muted"
-      >
-        <ExternalLink className="h-3.5 w-3.5" />
-      </a>
+      <div className="absolute right-3 top-3 flex items-center gap-1 text-muted-foreground/0 transition-all group-hover:text-muted-foreground">
+        <FavoriteButton toolSlug={tool.slug} />
+        <a
+          href={tool.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-md p-1.5 hover:bg-muted"
+        >
+          <ExternalLink className="h-3.5 w-3.5" />
+        </a>
+      </div>
     </div>
   );
 }

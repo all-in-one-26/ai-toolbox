@@ -5,6 +5,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ToolCard } from "@/components/tools/tool-card";
+import { FavoriteButton } from "@/components/tools/favorite-button";
 import { getToolBySlug, tools, categories, scenes } from "@/data/tools";
 import type { Metadata } from "next";
 
@@ -91,7 +92,8 @@ export default async function ToolDetailPage({
             </div>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
+          <FavoriteButton toolSlug={tool.slug} size="md" />
           <Link
             href={`/compare?a=${tool.slug}`}
             className={buttonVariants({ variant: "outline", size: "sm" })}
