@@ -7,6 +7,7 @@ import {
   scenarioCategories,
 } from "@/data/scenarios";
 import { StepCard } from "@/components/scenarios/step-card";
+import { AskAiButton } from "@/components/chat/ask-ai-button";
 import { buttonVariants } from "@/components/ui/button";
 import type { Metadata } from "next";
 
@@ -115,6 +116,13 @@ export default async function ScenarioDetailPage({ params }: Props) {
           ))}
         </div>
       )}
+
+      {/* AI Advisor CTA */}
+      <div className="mt-12 flex justify-center">
+        <AskAiButton
+          question={`我想了解"${scenario.title}"这个方案的更多细节，有什么建议？`}
+        />
+      </div>
     </div>
   );
 }

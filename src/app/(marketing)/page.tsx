@@ -4,6 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { ToolCard } from "@/components/tools/tool-card";
 import { ScenarioCard } from "@/components/scenarios/scenario-card";
 import { SearchBar } from "@/components/tools/search-bar";
+import { NewsletterSignup } from "@/components/newsletter/newsletter-signup";
 import { getFeaturedTools, getNewTools, categories } from "@/data/tools";
 import {
   allScenarios,
@@ -209,6 +210,11 @@ export default function LandingPage() {
           </div>
         </section>
       )}
+
+      {/* Newsletter */}
+      <section className="mx-auto max-w-2xl px-4 pb-20">
+        <NewsletterSignup />
+      </section>
     </>
   );
 }

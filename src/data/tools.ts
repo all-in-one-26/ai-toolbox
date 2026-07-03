@@ -1,3 +1,9 @@
+export type FeatureCheck = {
+  name: string;
+  supported: boolean;
+  note?: string;
+};
+
 export type Tool = {
   id: string;
   name: string;
@@ -5,6 +11,7 @@ export type Tool = {
   tagline: string;
   description: string;
   url: string;
+  affiliateUrl?: string;
   icon: string;
   categories: string[];
   scenes: string[];
@@ -15,6 +22,11 @@ export type Tool = {
   reviews: number;
   featured?: boolean;
   isNew?: boolean;
+  pros?: string[];
+  cons?: string[];
+  alternatives?: string[];
+  features?: FeatureCheck[];
+  chineseSupport?: "native" | "good" | "partial" | "none";
 };
 
 export type Scene = {
@@ -127,6 +139,20 @@ export const tools: Tool[] = [
     rating: 4.7,
     reviews: 2840,
     featured: true,
+    pros: ["生态最完善，插件市场丰富", "多模态能力强（图片、语音、视频）", "GPTs 自定义 Agent 生态", "联网搜索和数据分析内置"],
+    cons: ["中文表达偶尔不够地道", "免费版有次数限制", "国内访问需要代理", "Plus 价格偏高"],
+    alternatives: ["claude", "gemini", "deepseek"],
+    features: [
+      { name: "中文对话", supported: true, note: "良好" },
+      { name: "联网搜索", supported: true },
+      { name: "图片生成", supported: true, note: "DALL·E 3" },
+      { name: "代码执行", supported: true },
+      { name: "文件上传", supported: true },
+      { name: "API 接入", supported: true },
+      { name: "本地部署", supported: false },
+      { name: "免费使用", supported: true, note: "有限额" },
+    ],
+    chineseSupport: "good",
   },
   {
     id: "2",
@@ -145,6 +171,20 @@ export const tools: Tool[] = [
     rating: 4.8,
     reviews: 1920,
     featured: true,
+    pros: ["推理能力业界顶尖", "200K 超长上下文，处理长文档无压力", "代码能力极强，尤其复杂重构", "输出风格自然，中文质量高"],
+    cons: ["免费版额度较少", "不支持联网搜索", "图片生成需借助外部工具", "国内访问需要代理"],
+    alternatives: ["chatgpt", "deepseek", "gemini"],
+    features: [
+      { name: "中文对话", supported: true, note: "优秀" },
+      { name: "联网搜索", supported: false },
+      { name: "图片生成", supported: false },
+      { name: "代码执行", supported: true, note: "Artifacts" },
+      { name: "文件上传", supported: true },
+      { name: "API 接入", supported: true },
+      { name: "本地部署", supported: false },
+      { name: "免费使用", supported: true, note: "有限额" },
+    ],
+    chineseSupport: "good",
   },
   {
     id: "7",
@@ -162,6 +202,10 @@ export const tools: Tool[] = [
     tags: ["中文优化", "多模态", "阿里云"],
     rating: 4.3,
     reviews: 720,
+    pros: ["中文能力出色", "API 价格极低", "阿里云生态整合好", "支持长文本和多模态"],
+    cons: ["创意写作能力一般", "国际知名度低", "英文能力不如 GPT-4"],
+    alternatives: ["wenxin-yiyan", "doubao", "deepseek"],
+    chineseSupport: "native",
   },
   {
     id: "18",
@@ -179,6 +223,10 @@ export const tools: Tool[] = [
     tags: ["中文", "百度生态", "多模态"],
     rating: 4.1,
     reviews: 1200,
+    pros: ["完全免费无限制", "中文理解好", "百度搜索生态整合", "支持图像生成"],
+    cons: ["推理深度一般", "创意能力偏弱", "输出偶尔重复"],
+    alternatives: ["tongyi-qianwen", "doubao", "kimi"],
+    chineseSupport: "native",
   },
   {
     id: "15",
@@ -196,6 +244,10 @@ export const tools: Tool[] = [
     tags: ["长文本", "文档分析", "联网"],
     rating: 4.3,
     reviews: 890,
+    pros: ["200万字超长上下文", "完全免费", "联网搜索内置", "文档分析能力强"],
+    cons: ["创意写作一般", "代码能力中等", "复杂推理不够深"],
+    alternatives: ["deepseek", "tongyi-qianwen", "claude"],
+    chineseSupport: "native",
   },
   {
     id: "19",
@@ -213,6 +265,10 @@ export const tools: Tool[] = [
     tags: ["多模态", "Google", "搜索", "代码"],
     rating: 4.4,
     reviews: 1560,
+    pros: ["原生多模态（图片/音频/视频）", "Google 搜索整合强", "100万token上下文", "免费版额度充足"],
+    cons: ["中文能力不如国产模型", "国内访问需代理", "创意写作风格偏机械"],
+    alternatives: ["chatgpt", "claude", "deepseek"],
+    chineseSupport: "partial",
   },
   {
     id: "20",
@@ -230,6 +286,10 @@ export const tools: Tool[] = [
     tags: ["中文", "字节", "角色扮演"],
     rating: 4.2,
     reviews: 680,
+    pros: ["完全免费", "响应速度很快", "角色扮演能力好", "字节系产品整合"],
+    cons: ["深度推理一般", "学术写作不够严谨", "API 能力有限"],
+    alternatives: ["kimi", "tongyi-qianwen", "wenxin-yiyan"],
+    chineseSupport: "native",
   },
   {
     id: "21",
@@ -265,6 +325,20 @@ export const tools: Tool[] = [
     rating: 4.6,
     reviews: 1100,
     isNew: true,
+    pros: ["推理能力接近 GPT-4", "API 价格仅 OpenAI 1/10", "开源可本地部署", "中文能力出色"],
+    cons: ["多模态能力有限", "生态不如 OpenAI 丰富", "对话免费版偶尔排队"],
+    alternatives: ["chatgpt", "claude", "kimi"],
+    features: [
+      { name: "中文对话", supported: true, note: "优秀" },
+      { name: "联网搜索", supported: true },
+      { name: "图片生成", supported: false },
+      { name: "代码执行", supported: false },
+      { name: "文件上传", supported: true },
+      { name: "API 接入", supported: true },
+      { name: "本地部署", supported: true, note: "开源" },
+      { name: "免费使用", supported: true },
+    ],
+    chineseSupport: "native",
   },
   {
     id: "23",
@@ -317,6 +391,10 @@ export const tools: Tool[] = [
     rating: 4.3,
     reviews: 540,
     isNew: true,
+    pros: ["零代码搭建 AI Bot", "多平台发布（微信/飞书/Discord）", "免费额度充足", "工作流编排灵活"],
+    cons: ["复杂逻辑需要学习", "部分功能仍在完善中", "海外版和国内版有差异"],
+    alternatives: ["zhipu-chatglm", "chatgpt"],
+    chineseSupport: "native",
   },
 
   // ── AI 编程 ──
@@ -337,6 +415,10 @@ export const tools: Tool[] = [
     rating: 4.9,
     reviews: 1560,
     featured: true,
+    pros: ["代码补全体验最好", "多模型切换（GPT-4/Claude）", "对话式编程自然流畅", "VS Code 用户零学习成本"],
+    cons: ["Pro 版价格较高", "大项目偶尔上下文不够", "免费版次数有限"],
+    alternatives: ["github-copilot", "claude-code", "codeium"],
+    chineseSupport: "good",
   },
   {
     id: "14",
@@ -355,6 +437,10 @@ export const tools: Tool[] = [
     rating: 4.8,
     reviews: 420,
     isNew: true,
+    pros: ["代码库理解能力极强", "终端原生体验", "多文件编辑和 Git 一体化", "支持 MCP 扩展"],
+    cons: ["需要终端使用经验", "价格不低（Max $100/月）", "UI 类任务需配合浏览器"],
+    alternatives: ["cursor", "github-copilot", "devin"],
+    chineseSupport: "good",
   },
   {
     id: "16",
@@ -372,6 +458,10 @@ export const tools: Tool[] = [
     tags: ["代码补全", "IDE", "GitHub"],
     rating: 4.5,
     reviews: 1800,
+    pros: ["GitHub 深度整合", "支持几乎所有 IDE", "个人免费额度", "代码审查建议"],
+    cons: ["补全准确率不如 Cursor", "对话能力较弱", "上下文窗口较小"],
+    alternatives: ["cursor", "codeium", "tabnine"],
+    chineseSupport: "partial",
   },
   {
     id: "11",
@@ -390,6 +480,10 @@ export const tools: Tool[] = [
     rating: 4.6,
     reviews: 680,
     isNew: true,
+    pros: ["UI 代码质量高", "一键部署到 Vercel", "shadcn/ui 原生支持", "迭代修改对话式"],
+    cons: ["仅限前端/React", "后端逻辑需手动写", "复杂交互可能不精确"],
+    alternatives: ["bolt-new", "cursor", "replit-ai"],
+    chineseSupport: "good",
   },
   {
     id: "26",
@@ -497,6 +591,10 @@ export const tools: Tool[] = [
     rating: 4.6,
     reviews: 2100,
     featured: true,
+    pros: ["图像质量业界顶尖", "风格多样性强", "V6 支持文字渲染", "社区生态活跃"],
+    cons: ["无免费版", "需要学习提示词技巧", "国内使用需代理", "只能通过 Discord 使用"],
+    alternatives: ["stable-diffusion", "dall-e-3", "leonardo-ai"],
+    chineseSupport: "partial",
   },
   {
     id: "6",
@@ -514,6 +612,10 @@ export const tools: Tool[] = [
     tags: ["开源", "本地部署", "可商用"],
     rating: 4.4,
     reviews: 1680,
+    pros: ["完全免费开源", "可本地部署保护隐私", "插件生态极丰富", "可商用无限制"],
+    cons: ["需要较好的 GPU", "上手门槛高", "需自行搭建环境"],
+    alternatives: ["midjourney", "dall-e-3", "leonardo-ai"],
+    chineseSupport: "partial",
   },
   {
     id: "10",
@@ -531,6 +633,10 @@ export const tools: Tool[] = [
     tags: ["设计", "模板", "社交媒体"],
     rating: 4.5,
     reviews: 1340,
+    pros: ["模板丰富上手即用", "AI 功能越来越强", "团队协作方便", "非设计师也能出专业作品"],
+    cons: ["高级功能需付费", "导出质量有限制", "部分中文字体缺失"],
+    alternatives: ["figma-ai", "meitu-ai", "jimeng-ai"],
+    chineseSupport: "good",
   },
   {
     id: "31",
@@ -863,6 +969,10 @@ export const tools: Tool[] = [
     tags: ["音乐", "歌曲", "作曲"],
     rating: 4.4,
     reviews: 560,
+    pros: ["零门槛生成完整歌曲", "支持自定义歌词和风格", "音质和人声效果好", "每日有免费额度"],
+    cons: ["商用授权条款需注意", "复杂编曲控制有限", "生成结果随机性较大"],
+    alternatives: ["udio"],
+    chineseSupport: "good",
     isNew: true,
   },
   {
@@ -969,6 +1079,10 @@ export const tools: Tool[] = [
     tags: ["搜索", "联网", "引用", "研究"],
     rating: 4.5,
     reviews: 980,
+    pros: ["回答附带来源引用", "实时联网信息准确", "支持学术论文搜索", "界面简洁好用"],
+    cons: ["中文搜索结果偏少", "深度分析不如 Claude", "免费版有次数限制", "国内访问需代理"],
+    alternatives: ["kimi", "chatgpt", "gemini"],
+    chineseSupport: "partial",
   },
   {
     id: "52",

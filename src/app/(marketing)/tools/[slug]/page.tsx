@@ -1,6 +1,16 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Star, ExternalLink, ArrowLeft, GitCompare } from "lucide-react";
+import {
+  Star,
+  ExternalLink,
+  ArrowLeft,
+  GitCompare,
+  ThumbsUp,
+  ThumbsDown,
+  Check,
+  X,
+  Globe,
+} from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -102,7 +112,7 @@ export default async function ToolDetailPage({
             对比
           </Link>
           <a
-            href={tool.url}
+            href={tool.affiliateUrl ?? tool.url}
             target="_blank"
             rel="noopener noreferrer"
             className={buttonVariants({ size: "sm" })}
@@ -162,6 +172,33 @@ export default async function ToolDetailPage({
             </div>
           </div>
 
+          {tool.chineseSupport && (
+            <div>
+              <h3 className="mb-2 text-sm font-semibold">中文支持</h3>
+              <div className="flex items-center gap-2">
+                <Globe className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">
+                  {{
+                    native: "原生中文",
+                    good: "中文良好",
+                    partial: "部分中文",
+                    none: "不支持中文",
+                  }[tool.chineseSupport]}
+                </span>
+                <span
+                  className={`h-2 w-2 rounded-full ${
+                    {
+                      native: "bg-emerald-500",
+                      good: "bg-blue-500",
+                      partial: "bg-amber-500",
+                      none: "bg-red-500",
+                    }[tool.chineseSupport]
+                  }`}
+                />
+              </div>
+            </div>
+          )}
+
           <div>
             <h3 className="mb-2 text-sm font-semibold">标签</h3>
             <div className="flex flex-wrap gap-1.5">
@@ -177,6 +214,135 @@ export default async function ToolDetailPage({
           </div>
         </div>
       </div>
+
+      {/* Pros & Cons */}
+      {(tool.pros || tool.cons) && (
+        <>
+          <Separator className="my-8" />
+          <div className="grid gap-6 md:grid-cols-2">
+            {tool.pros && tool.pros.length > 0 && (
+              <div>
+                <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
+                  <ThumbsUp className="h-4.5 w-4.5 text-emerald-500" />
+                  优点
+                </h2>
+                <ul className="space-y-2">
+                  {tool.pros.map((pro) => (
+                    <li
+                      key={pro}
+                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                    >
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                      {pro}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {tool.cons && tool.cons.length > 0 && (
+              <div>
+                <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold">
+                  <ThumbsDown className="h-4.5 w-4.5 text-red-400" />
+                  缺点
+                </h2>
+                <ul className="space-y-2">
+                  {tool.cons.map((con) => (
+                    <li
+                      key={con}
+                      className="flex items-start gap-2 text-sm text-muted-foreground"
+                    >
+                      <X className="mt-0.5 h-4 w-4 shrink-0 text-red-400" />
+                      {con}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+
+      {/* Features */}
+      {tool.features && tool.features.length > 0 && (
+        <>
+          <Separator className="my-8" />
+          <div>
+            <h2 className="mb-4 text-lg font-semibold">功能支持</h2>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {tool.features.map((f) => (
+                <div
+                  key={f.name}
+                  className="flex items-center gap-2 rounded-lg border border-border/60 px-3 py-2.5 text-sm"
+                >
+                  {f.supported ? (
+                    <Check className="h-4 w-4 shrink-0 text-emerald-500" />
+                  ) : (
+                    <X className="h-4 w-4 shrink-0 text-muted-foreground/40" />
+                  )}
+                  <span
+                    className={
+                      f.supported ? "" : "text-muted-foreground/60"
+                    }
+                  >
+                    {f.name}
+                  </span>
+                  {f.note && (
+                    <span className="ml-auto text-[10px] text-muted-foreground">
+                      {f.note}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Alternatives */}
+      {tool.alternatives && tool.alternatives.length > 0 && (
+        <>
+          <Separator className="my-8" />
+          <div>
+            <h2 className="mb-4 text-lg font-semibold">
+              觉得不合适？试试这些替代品
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {tool.alternatives
+                .map((slug) => tools.find((t) => t.slug === slug))
+                .filter(Boolean)
+                .map((alt) => (
+                  <div
+                    key={alt!.id}
+                    className="flex items-center justify-between rounded-xl border border-border/60 p-4"
+                  >
+                    <Link
+                      href={`/tools/${alt!.slug}`}
+                      className="flex items-center gap-3"
+                    >
+                      <span className="text-2xl">{alt!.icon}</span>
+                      <div>
+                        <h3 className="font-semibold">{alt!.name}</h3>
+                        <p className="text-xs text-muted-foreground">
+                          {alt!.tagline}
+                        </p>
+                      </div>
+                    </Link>
+                    <Link
+                      href={`/compare?a=${tool.slug}&b=${alt!.slug}`}
+                      className={buttonVariants({
+                        variant: "outline",
+                        size: "sm",
+                      })}
+                    >
+                      <GitCompare className="mr-1 h-3 w-3" />
+                      对比
+                    </Link>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Related */}
       {related.length > 0 && (

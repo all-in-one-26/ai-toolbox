@@ -4,7 +4,9 @@ import {
   getScenariosByCategory,
 } from "@/data/scenarios";
 import { ScenarioCard } from "@/components/scenarios/scenario-card";
+import { ScenarioFilters } from "@/components/scenarios/scenario-filters";
 import type { Metadata } from "next";
+import type { Scenario } from "@/data/scenarios";
 
 export const metadata: Metadata = {
   title: "场景推荐 — 50+ AI 应用场景的可执行方案 | AI-Toolbox",
@@ -12,7 +14,22 @@ export const metadata: Metadata = {
     "按场景浏览 AI 工具使用方案：自媒体运营、联盟营销、SEO站群、电商运营、产品经理、设计师等，每个场景提供完整步骤、提示语样例和工具推荐。",
 };
 
-export default function ScenariosPage() {
+function filterScenarios(
+  scenarios: Scenario[],
+  difficulty?: string,
+): Scenario[] {
+  if (!difficulty) return scenarios;
+  return scenarios.filter((s) => s.difficulty === difficulty);
+}
+
+export default async function ScenariosPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ difficulty?: string }>;
+}) {
+  const params = await searchParams;
+  const difficultyFilter = params.difficulty;
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-12">
       <div className="mb-10 text-center">
@@ -27,8 +44,11 @@ export default function ScenariosPage() {
         </p>
       </div>
 
+      <ScenarioFilters />
+
       {scenarioCategories.map((cat) => {
-        const scenarios = getScenariosByCategory(cat.id);
+        const allCatScenarios = getScenariosByCategory(cat.id);
+        const scenarios = filterScenarios(allCatScenarios, difficultyFilter);
         if (scenarios.length === 0) return null;
 
         return (

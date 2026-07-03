@@ -80,7 +80,7 @@ export function ToolCard({ tool }: { tool: Tool }) {
       <div className="absolute right-3 top-3 flex items-center gap-1 text-muted-foreground/0 transition-all group-hover:text-muted-foreground">
         <FavoriteButton toolSlug={tool.slug} />
         <a
-          href={tool.url}
+          href={tool.affiliateUrl ?? tool.url}
           target="_blank"
           rel="noopener noreferrer"
           className="rounded-md p-1.5 hover:bg-muted"
