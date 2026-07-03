@@ -1,208 +1,154 @@
 import Link from "next/link";
-import { ArrowRight, Wrench, GitCompare, Target } from "lucide-react";
+import { ArrowRight, Wrench, Star } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { ToolCard } from "@/components/tools/tool-card";
-import { ScenarioCard } from "@/components/scenarios/scenario-card";
 import { SearchBar } from "@/components/tools/search-bar";
 import { NewsletterSignup } from "@/components/newsletter/newsletter-signup";
-import {
-  categories,
-  getToolsByCategory,
-} from "@/data/tools";
-import {
-  allScenarios,
-  scenarioCategories,
-  getScenariosByCategory,
-} from "@/data/scenarios";
+import { getToolBySlug } from "@/data/tools";
 
-function pickDiverseScenarios(count: number) {
-  const picked: typeof allScenarios = [];
-  for (const cat of scenarioCategories) {
-    const catScenarios = getScenariosByCategory(cat.id);
-    if (catScenarios.length > 0 && picked.length < count) {
-      picked.push(catScenarios[0]);
-    }
-  }
-  let idx = 0;
-  while (picked.length < count && idx < allScenarios.length) {
-    if (!picked.some((p) => p.id === allScenarios[idx].id)) {
-      picked.push(allScenarios[idx]);
-    }
-    idx++;
-  }
-  return picked.slice(0, count);
-}
+const useCases = [
+  {
+    icon: "✍️",
+    title: "写小红书 / 公众号",
+    desc: "爆款标题、封面、正文一条龙",
+    href: "/scenarios/xiaohongshu-note",
+  },
+  {
+    icon: "🎬",
+    title: "做短视频",
+    desc: "脚本、字幕、配音、剪辑全搞定",
+    href: "/scenarios/douyin-script",
+  },
+  {
+    icon: "💻",
+    title: "写代码 / 建站",
+    desc: "AI 辅助编程，效率翻倍",
+    href: "/scenarios/ai-full-stack",
+  },
+  {
+    icon: "🎨",
+    title: "做设计 / 画图",
+    desc: "Logo、海报、产品图一句话生成",
+    href: "/scenarios/brand-logo-vi",
+  },
+  {
+    icon: "🔍",
+    title: "做调研 / 找资料",
+    desc: "AI 搜索替代传统搜索引擎",
+    href: "/scenarios/keyword-research",
+  },
+  {
+    icon: "🛒",
+    title: "电商运营",
+    desc: "Listing 优化、客服话术、竞品分析",
+    href: "/scenarios/amazon-listing",
+  },
+];
 
-const showcaseCategories = ["chat", "code", "image", "video", "audio", "writing", "search", "design"];
+const topToolSlugs = [
+  "chatgpt",
+  "claude",
+  "midjourney",
+  "cursor",
+  "deepseek",
+  "suno",
+];
 
 export default function LandingPage() {
-  const showcaseScenarios = pickDiverseScenarios(6);
+  const topTools = topToolSlugs
+    .map((slug) => getToolBySlug(slug))
+    .filter(Boolean);
 
   return (
     <>
-      {/* Hero */}
+      {/* Hero — 首屏 */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_50%_at_50%_-20%,oklch(0.75_0.15_280/0.25),transparent)]" />
-        <div className="mx-auto max-w-6xl px-4 pb-16 pt-20 text-center md:pt-28">
+        <div className="mx-auto max-w-6xl px-4 pb-20 pt-20 text-center md:pt-28">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-200 bg-violet-50 px-4 py-1.5 text-sm text-violet-700 dark:border-violet-800 dark:bg-violet-950/50 dark:text-violet-300">
             <Wrench className="h-3.5 w-3.5" />
-            不只是导航，是你的AI工具智能顾问
+            不只是导航，是你的 AI 工具智能顾问
           </div>
           <h1 className="mx-auto max-w-3xl text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-            从1000+工具中
+            告诉我你想做什么
             <br />
             <span className="bg-gradient-to-r from-violet-600 to-blue-600 bg-clip-text text-transparent dark:from-violet-400 dark:to-blue-400">
-              找到最适合你的AI
+              我帮你挑最好的 AI
             </span>
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-base text-muted-foreground md:text-lg">
-            场景化智能推荐、横向PK对比 — 告别盲目试用，精准匹配你的需求。
+          <p className="mx-auto mt-5 max-w-lg text-base text-muted-foreground md:text-lg">
+            100+ 工具实测对比，50+ 场景可执行方案，不踩坑。
           </p>
           <div className="mt-8 flex justify-center">
             <SearchBar />
           </div>
-          <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-muted-foreground">
-            <span>热门：</span>
-            {["ChatGPT", "Claude", "Midjourney", "Cursor", "Suno"].map((t) => (
-              <Link
-                key={t}
-                href={`/tools/${t.toLowerCase()}`}
-                className="rounded-md bg-muted px-2 py-1 transition-colors hover:bg-muted/80"
-              >
-                {t}
-              </Link>
-            ))}
-          </div>
         </div>
       </section>
 
-      {/* Why Different */}
-      <section className="mx-auto max-w-6xl px-4 pb-16">
-        <div className="grid gap-4 md:grid-cols-2">
+      {/* 第二屏 — 你想用 AI 做什么？ */}
+      <section className="mx-auto max-w-4xl px-4 pb-20">
+        <h2 className="mb-8 text-center text-2xl font-bold tracking-tight md:text-3xl">
+          你想用 AI 做什么？
+        </h2>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {useCases.map((uc) => (
+            <Link
+              key={uc.href}
+              href={uc.href}
+              className="group flex items-start gap-3.5 rounded-xl border border-border/60 bg-card p-4 transition-all hover:border-violet-300 hover:shadow-md dark:hover:border-violet-700"
+            >
+              <span className="mt-0.5 text-2xl">{uc.icon}</span>
+              <div className="min-w-0">
+                <h3 className="font-semibold leading-tight group-hover:text-violet-600 dark:group-hover:text-violet-400">
+                  {uc.title}
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">{uc.desc}</p>
+              </div>
+              <ArrowRight className="ml-auto mt-1 h-4 w-4 shrink-0 text-muted-foreground/0 transition-all group-hover:text-violet-500" />
+            </Link>
+          ))}
+        </div>
+        <div className="mt-6 text-center">
           <Link
             href="/scenarios"
-            className="rounded-xl border border-border/60 bg-card p-5 text-center transition-all hover:border-violet-300 hover:shadow-md dark:hover:border-violet-700"
+            className={buttonVariants({ variant: "outline", size: "sm" })}
           >
-            <Target className="mx-auto h-8 w-8 text-violet-500" />
-            <h3 className="mt-3 font-semibold">场景化推荐</h3>
-            <p className="mt-1.5 text-sm text-muted-foreground">
-              按&quot;自媒体/电商/开发者&quot;找工具，不再漫无目的翻分类
-            </p>
-          </Link>
-          <Link
-            href="/compare"
-            className="rounded-xl border border-border/60 bg-card p-5 text-center transition-all hover:border-violet-300 hover:shadow-md dark:hover:border-violet-700"
-          >
-            <GitCompare className="mx-auto h-8 w-8 text-violet-500" />
-            <h3 className="mt-3 font-semibold">工具PK对比</h3>
-            <p className="mt-1.5 text-sm text-muted-foreground">
-              ChatGPT vs Claude 全维度横向对比，帮你做选择
-            </p>
+            查看全部 50+ 场景
+            <ArrowRight className="ml-1 h-3.5 w-3.5" />
           </Link>
         </div>
       </section>
 
-      {/* Tools by Category */}
-      <section id="tools" className="mx-auto max-w-6xl px-4 pb-20">
+      {/* 第三屏 — 最受欢迎的工具 */}
+      <section className="mx-auto max-w-6xl px-4 pb-16">
         <div className="mb-8 flex items-end justify-between">
           <div>
-            <p className="text-sm font-semibold tracking-wide text-violet-600 dark:text-violet-400">
-              工具导航
-            </p>
-            <h2 className="mt-1 text-2xl font-bold tracking-tight md:text-3xl">
-              按类型浏览 AI 工具
+            <div className="mb-1 flex items-center gap-1.5">
+              <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
+              <p className="text-sm font-semibold tracking-wide text-amber-600 dark:text-amber-400">
+                最受欢迎
+              </p>
+            </div>
+            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">
+              大家都在用的 AI 工具
             </h2>
-            <p className="mt-2 text-muted-foreground">
-              从对话、编程、绘画到视频，快速找到你需要的工具
-            </p>
           </div>
           <Link
             href="/tools"
             className={buttonVariants({ variant: "outline", size: "sm" })}
           >
-            查看全部
+            全部工具
             <ArrowRight className="ml-1 h-3.5 w-3.5" />
           </Link>
-        </div>
-        <div className="mb-6 flex flex-wrap gap-2">
-          {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/tools?category=${cat.id}`}
-              className="rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs font-medium transition-all hover:border-violet-300 hover:shadow-sm dark:hover:border-violet-700"
-            >
-              {cat.icon} {cat.name}
-            </Link>
-          ))}
-        </div>
-        {categories
-          .filter((cat) => showcaseCategories.includes(cat.id))
-          .map((cat) => {
-            const tools = getToolsByCategory(cat.id).slice(0, 3);
-            if (tools.length === 0) return null;
-            return (
-              <div key={cat.id} className="mb-10">
-                <div className="mb-4 flex items-center gap-2">
-                  <span className="text-xl">{cat.icon}</span>
-                  <h3 className="text-lg font-bold">{cat.name}</h3>
-                  <Link
-                    href={`/tools?category=${cat.id}`}
-                    className="ml-auto text-xs text-violet-600 hover:underline dark:text-violet-400"
-                  >
-                    查看更多 →
-                  </Link>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {tools.map((tool) => (
-                    <ToolCard key={tool.id} tool={tool} />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-      </section>
-
-      {/* Scenarios */}
-      <section id="scenarios" className="mx-auto max-w-6xl px-4 pb-20">
-        <div className="mb-8 flex items-end justify-between">
-          <div>
-            <p className="text-sm font-semibold tracking-wide text-violet-600 dark:text-violet-400">
-              场景推荐
-            </p>
-            <h2 className="mt-1 text-2xl font-bold tracking-tight md:text-3xl">
-              {allScenarios.length}+ 真实场景，直接给可执行方案
-            </h2>
-            <p className="mt-2 text-muted-foreground">
-              每个场景含完整步骤、提示语样例、操作注意和可选工具
-            </p>
-          </div>
-          <Link
-            href="/scenarios"
-            className={buttonVariants({ variant: "outline", size: "sm" })}
-          >
-            查看全部
-            <ArrowRight className="ml-1 h-3.5 w-3.5" />
-          </Link>
-        </div>
-        <div className="mb-6 flex flex-wrap gap-2">
-          {scenarioCategories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/scenarios#${cat.id}`}
-              className="rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs font-medium transition-all hover:border-violet-300 hover:shadow-sm dark:hover:border-violet-700"
-            >
-              {cat.icon} {cat.name}
-            </Link>
-          ))}
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {showcaseScenarios.map((scenario) => (
-            <ScenarioCard key={scenario.id} scenario={scenario} />
+          {topTools.map((tool) => (
+            <ToolCard key={tool!.id} tool={tool!} />
           ))}
         </div>
       </section>
 
-      {/* Newsletter */}
+      {/* 订阅 */}
       <section className="mx-auto max-w-2xl px-4 pb-20">
         <NewsletterSignup />
       </section>
