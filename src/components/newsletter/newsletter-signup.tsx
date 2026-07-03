@@ -7,16 +7,24 @@ import { Input } from "@/components/ui/input";
 
 export function NewsletterSignup() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!email.trim()) return;
 
     setStatus("loading");
-    setTimeout(() => {
+    try {
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error();
       setStatus("success");
-    }, 800);
+    } catch {
+      setStatus("error");
+    }
   }
 
   if (status === "success") {
@@ -62,6 +70,9 @@ export function NewsletterSignup() {
           )}
         </Button>
       </form>
+      {status === "error" && (
+        <p className="mt-3 text-xs text-red-500">订阅失败，请稍后重试。</p>
+      )}
       <p className="mt-3 text-[11px] text-muted-foreground/60">
         每周一封，随时退订。我们尊重你的隐私。
       </p>
