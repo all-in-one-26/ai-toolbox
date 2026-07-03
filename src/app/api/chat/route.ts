@@ -1,4 +1,4 @@
-import { streamText } from "ai";
+import { streamText, convertToModelMessages } from "ai";
 import { openai } from "@ai-sdk/openai";
 import { tools as allTools } from "@/data/tools";
 
@@ -11,6 +11,8 @@ const toolContext = allTools
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
+
+  const modelMessages = await convertToModelMessages(messages);
 
   const result = streamText({
     model: openai("gpt-4o-mini"),
@@ -25,7 +27,7 @@ ${toolContext}
 3. 每个推荐说明：为什么适合、优缺点、价格
 4. 如果有替代方案也简要提及
 5. 回复简洁，用中文`,
-    messages,
+    messages: modelMessages,
   });
 
   return result.toTextStreamResponse();
