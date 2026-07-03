@@ -1,11 +1,14 @@
 import Link from "next/link";
-import { ArrowRight, Wrench, Zap, GitCompare, Target } from "lucide-react";
+import { ArrowRight, Wrench, GitCompare, Target } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { ToolCard } from "@/components/tools/tool-card";
 import { ScenarioCard } from "@/components/scenarios/scenario-card";
 import { SearchBar } from "@/components/tools/search-bar";
 import { NewsletterSignup } from "@/components/newsletter/newsletter-signup";
-import { getFeaturedTools, getNewTools, categories } from "@/data/tools";
+import {
+  categories,
+  getToolsByCategory,
+} from "@/data/tools";
 import {
   allScenarios,
   scenarioCategories,
@@ -30,9 +33,9 @@ function pickDiverseScenarios(count: number) {
   return picked.slice(0, count);
 }
 
+const showcaseCategories = ["chat", "code", "image", "video", "audio", "writing", "search", "design"];
+
 export default function LandingPage() {
-  const featured = getFeaturedTools();
-  const newTools = getNewTools();
   const showcaseScenarios = pickDiverseScenarios(6);
 
   return (
@@ -99,6 +102,66 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Tools by Category */}
+      <section id="tools" className="mx-auto max-w-6xl px-4 pb-20">
+        <div className="mb-8 flex items-end justify-between">
+          <div>
+            <p className="text-sm font-semibold tracking-wide text-violet-600 dark:text-violet-400">
+              工具导航
+            </p>
+            <h2 className="mt-1 text-2xl font-bold tracking-tight md:text-3xl">
+              按类型浏览 AI 工具
+            </h2>
+            <p className="mt-2 text-muted-foreground">
+              从对话、编程、绘画到视频，快速找到你需要的工具
+            </p>
+          </div>
+          <Link
+            href="/tools"
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            查看全部
+            <ArrowRight className="ml-1 h-3.5 w-3.5" />
+          </Link>
+        </div>
+        <div className="mb-6 flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <Link
+              key={cat.id}
+              href={`/tools?category=${cat.id}`}
+              className="rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs font-medium transition-all hover:border-violet-300 hover:shadow-sm dark:hover:border-violet-700"
+            >
+              {cat.icon} {cat.name}
+            </Link>
+          ))}
+        </div>
+        {categories
+          .filter((cat) => showcaseCategories.includes(cat.id))
+          .map((cat) => {
+            const tools = getToolsByCategory(cat.id).slice(0, 3);
+            if (tools.length === 0) return null;
+            return (
+              <div key={cat.id} className="mb-10">
+                <div className="mb-4 flex items-center gap-2">
+                  <span className="text-xl">{cat.icon}</span>
+                  <h3 className="text-lg font-bold">{cat.name}</h3>
+                  <Link
+                    href={`/tools?category=${cat.id}`}
+                    className="ml-auto text-xs text-violet-600 hover:underline dark:text-violet-400"
+                  >
+                    查看更多 →
+                  </Link>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {tools.map((tool) => (
+                    <ToolCard key={tool.id} tool={tool} />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+      </section>
+
       {/* Scenarios */}
       <section id="scenarios" className="mx-auto max-w-6xl px-4 pb-20">
         <div className="mb-8 flex items-end justify-between">
@@ -138,78 +201,6 @@ export default function LandingPage() {
           ))}
         </div>
       </section>
-
-      {/* Categories */}
-      <section className="mx-auto max-w-6xl px-4 pb-12">
-        <h2 className="mb-6 text-center text-2xl font-bold tracking-tight md:text-3xl">
-          按类型浏览
-        </h2>
-        <div className="flex flex-wrap justify-center gap-2">
-          {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/tools?category=${cat.id}`}
-              className="rounded-full border border-border/60 bg-card px-4 py-2 text-sm transition-all hover:border-violet-300 hover:shadow-sm dark:hover:border-violet-700"
-            >
-              <span className="mr-1.5">{cat.icon}</span>
-              {cat.name}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Featured Tools */}
-      <section className="mx-auto max-w-6xl px-4 pb-20">
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight">精选推荐</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              编辑部严选，最值得关注的AI工具
-            </p>
-          </div>
-          <Link
-            href="/tools"
-            className={buttonVariants({ variant: "outline", size: "sm" })}
-          >
-            查看全部
-            <ArrowRight className="ml-1 h-3.5 w-3.5" />
-          </Link>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {featured.map((tool) => (
-            <ToolCard key={tool.id} tool={tool} />
-          ))}
-        </div>
-      </section>
-
-      {/* New Tools */}
-      {newTools.length > 0 && (
-        <section className="mx-auto max-w-6xl px-4 pb-20">
-          <div className="mb-8 flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight">
-                <Zap className="mr-2 inline h-5 w-5 text-amber-500" />
-                最新上线
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                最近发现的值得关注的新工具
-              </p>
-            </div>
-            <Link
-              href="/tools"
-              className={buttonVariants({ variant: "outline", size: "sm" })}
-            >
-              查看全部
-              <ArrowRight className="ml-1 h-3.5 w-3.5" />
-            </Link>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {newTools.slice(0, 9).map((tool) => (
-              <ToolCard key={tool.id} tool={tool} />
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* Newsletter */}
       <section className="mx-auto max-w-2xl px-4 pb-20">
