@@ -37,6 +37,32 @@ export function generateStaticParams() {
   return tools.map((t) => ({ slug: t.slug }));
 }
 
+function buildJsonLd(tool: NonNullable<ReturnType<typeof getToolBySlug>>) {
+  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://ai-toolbox.dev";
+  return {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: tool.name,
+    description: tool.description,
+    url: tool.url,
+    applicationCategory: "AI Tool",
+    operatingSystem: "Web",
+    offers: {
+      "@type": "Offer",
+      price: tool.pricing === "free" || tool.pricing === "open-source" ? "0" : undefined,
+      priceCurrency: "USD",
+      description: tool.priceNote ?? undefined,
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: tool.rating,
+      reviewCount: tool.reviews,
+      bestRating: 5,
+      worstRating: 1,
+    },
+  };
+}
+
 export default async function ToolDetailPage({
   params,
 }: {
@@ -66,8 +92,14 @@ export default async function ToolDetailPage({
     "open-source": "开源",
   };
 
+  const jsonLd = buildJsonLd(tool);
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Link
         href="/tools"
         className="mb-6 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
@@ -77,19 +109,19 @@ export default async function ToolDetailPage({
       </Link>
 
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-center gap-4">
           <span className="text-5xl">{tool.icon}</span>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-3xl font-bold">{tool.name}</h1>
+              <h1 className="text-2xl font-bold sm:text-3xl">{tool.name}</h1>
               {tool.isNew && (
                 <Badge className="bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400">
                   NEW
                 </Badge>
               )}
             </div>
-            <p className="mt-1 text-lg text-muted-foreground">{tool.tagline}</p>
+            <p className="mt-1 text-base text-muted-foreground sm:text-lg">{tool.tagline}</p>
             <div className="mt-2 flex items-center gap-3 text-sm">
               <div className="flex items-center gap-1">
                 <Star className="h-4 w-4 fill-amber-400 text-amber-400" />

@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
 import { TextStreamChatTransport } from "ai";
 import { MessageCircle, X, Send, Sparkles, Loader2 } from "lucide-react";
+import Markdown from "react-markdown";
 import { cn } from "@/lib/utils";
 
 function getMessageText(message: {
@@ -144,7 +145,13 @@ export function AiChat({ initialMessage }: { initialMessage?: string }) {
                         : "bg-muted text-foreground",
                     )}
                   >
-                    <div className="whitespace-pre-wrap">{text}</div>
+                    {m.role === "assistant" ? (
+                      <div className="prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-headings:my-2 prose-a:text-violet-600 dark:prose-a:text-violet-400">
+                        <Markdown>{text}</Markdown>
+                      </div>
+                    ) : (
+                      <div className="whitespace-pre-wrap">{text}</div>
+                    )}
                   </div>
                 </div>
               );

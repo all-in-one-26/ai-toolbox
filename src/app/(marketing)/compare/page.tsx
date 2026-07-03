@@ -165,7 +165,7 @@ export default function ComparePage() {
       </div>
 
       {/* Selectors */}
-      <div className="mb-8 flex items-center gap-4">
+      <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
         {slugs.map((slug, i) => (
           <div key={i} className="relative flex-1">
             <ToolSelect
@@ -312,7 +312,7 @@ export default function ComparePage() {
             <div
               className="grid gap-4"
               style={{
-                gridTemplateColumns: `repeat(${selectedTools.length}, 1fr)`,
+                gridTemplateColumns: `repeat(${selectedTools.length}, minmax(200px, 1fr))`,
               }}
             >
               {selectedTools.map((t) => (

@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Send, CheckCircle } from "lucide-react";
+import { Send, CheckCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function SubmitToolPage() {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
   const [form, setForm] = useState({
     toolName: "",
     toolUrl: "",
@@ -14,20 +15,33 @@ export default function SubmitToolPage() {
     submitterEmail: "",
   });
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const subject = encodeURIComponent(`工具提交: ${form.toolName}`);
-    const body = encodeURIComponent(
-      `工具名称: ${form.toolName}\n网址: ${form.toolUrl}\n简介: ${form.description}\n提交者邮箱: ${form.submitterEmail}`,
-    );
-    window.open(
-      `mailto:jack.vet1999@gmail.com?subject=${subject}&body=${body}`,
-      "_blank",
-    );
-    setSubmitted(true);
+    setStatus("loading");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/submit-tool", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrorMsg(data.error ?? "提交失败，请稍后重试");
+        setStatus("error");
+        return;
+      }
+
+      setStatus("success");
+    } catch {
+      setErrorMsg("网络错误，请检查网络后重试");
+      setStatus("error");
+    }
   }
 
-  if (submitted) {
+  if (status === "success") {
     return (
       <div className="flex min-h-[60vh] items-center justify-center px-4">
         <div className="text-center">
@@ -40,7 +54,7 @@ export default function SubmitToolPage() {
             variant="outline"
             className="mt-6"
             onClick={() => {
-              setSubmitted(false);
+              setStatus("idle");
               setForm({
                 toolName: "",
                 toolUrl: "",
@@ -122,9 +136,17 @@ export default function SubmitToolPage() {
           />
         </div>
 
-        <Button type="submit" className="w-full gap-2">
-          <Send className="h-4 w-4" />
-          提交推荐
+        {status === "error" && (
+          <p className="text-sm text-red-500">{errorMsg}</p>
+        )}
+
+        <Button type="submit" className="w-full gap-2" disabled={status === "loading"}>
+          {status === "loading" ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Send className="h-4 w-4" />
+          )}
+          {status === "loading" ? "提交中..." : "提交推荐"}
         </Button>
       </form>
     </div>
