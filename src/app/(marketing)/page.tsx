@@ -2,14 +2,14 @@ import Link from "next/link";
 import { ArrowRight, Wrench, Zap, GitCompare, Target } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { ToolCard } from "@/components/tools/tool-card";
-import { WorkflowCard } from "@/components/tools/workflow-card";
+import { ScenarioCard } from "@/components/scenarios/scenario-card";
 import { SearchBar } from "@/components/tools/search-bar";
 import {
   getFeaturedTools,
   getNewTools,
   categories,
 } from "@/data/tools";
-import { workflows } from "@/data/workflows";
+import { allScenarios, scenarioCategories } from "@/data/scenarios";
 
 export default function LandingPage() {
   const featured = getFeaturedTools();
@@ -88,31 +88,42 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Workflows */}
-      <section id="workflows" className="mx-auto max-w-6xl px-4 pb-20">
+      {/* Scenarios */}
+      <section id="scenarios" className="mx-auto max-w-6xl px-4 pb-20">
         <div className="mb-8 flex items-end justify-between">
           <div>
             <p className="text-sm font-semibold tracking-wide text-violet-600 dark:text-violet-400">
-              工作流专区
+              场景推荐
             </p>
             <h2 className="mt-1 text-2xl font-bold tracking-tight md:text-3xl">
-              真正好用的导航，要直接给可执行方案
+              {allScenarios.length}+ 真实场景，直接给可执行方案
             </h2>
             <p className="mt-2 text-muted-foreground">
-              不只是列工具，而是告诉你该怎么用、按什么顺序操作
+              每个场景含完整步骤、提示语样例、操作注意和可选工具
             </p>
           </div>
           <Link
-            href="/workflows"
+            href="/scenarios"
             className={buttonVariants({ variant: "outline", size: "sm" })}
           >
             查看全部
             <ArrowRight className="ml-1 h-3.5 w-3.5" />
           </Link>
         </div>
-        <div className="grid gap-6 md:grid-cols-2">
-          {workflows.slice(0, 4).map((wf) => (
-            <WorkflowCard key={wf.id} workflow={wf} />
+        <div className="mb-6 flex flex-wrap gap-2">
+          {scenarioCategories.map((cat) => (
+            <Link
+              key={cat.id}
+              href={`/scenarios#${cat.id}`}
+              className="rounded-full border border-border/60 bg-card px-3 py-1.5 text-xs font-medium transition-all hover:border-violet-300 hover:shadow-sm dark:hover:border-violet-700"
+            >
+              {cat.icon} {cat.name}
+            </Link>
+          ))}
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {allScenarios.slice(0, 6).map((scenario) => (
+            <ScenarioCard key={scenario.id} scenario={scenario} />
           ))}
         </div>
       </section>

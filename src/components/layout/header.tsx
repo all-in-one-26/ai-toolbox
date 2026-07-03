@@ -31,10 +31,10 @@ export function Header() {
             PK对比
           </Link>
           <Link
-            href="/workflows"
+            href="/scenarios"
             className="text-muted-foreground transition-colors hover:text-foreground"
           >
-            工作流
+            场景推荐
           </Link>
         </nav>
 
